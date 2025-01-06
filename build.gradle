@@ -21,6 +21,8 @@ dependencies {
     implementation("io.micronaut:micronaut-http-server")
     implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    implementation("io.micronaut:micronaut-validation:3.9.4")
+    implementation("jakarta.validation:jakarta.validation-api:3.0.2")
     compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.h2database:h2")

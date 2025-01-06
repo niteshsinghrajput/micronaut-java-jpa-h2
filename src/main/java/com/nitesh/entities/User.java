@@ -3,6 +3,7 @@ package com.nitesh.entities;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Serdeable
@@ -13,8 +14,14 @@ public class User {
     @GeneratedValue
     private Long id;
 
+    @NotBlank(message = "Name is required.")
     private String name;
+
+    @NotBlank(message = "Contact is required.")
     private String contact;
+
+    @NotBlank(message = "Email is required.")
+    @Email
     private String email;
 
     @Column(name = "created_at", nullable = false, updatable = false)

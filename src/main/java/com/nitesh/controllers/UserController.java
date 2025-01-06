@@ -4,6 +4,7 @@ import com.nitesh.entities.User;
 import com.nitesh.exceptions.UserNotFoundException;
 import com.nitesh.services.UserService;
 import io.micronaut.http.annotation.*;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,12 +32,12 @@ public class UserController {
     }
 
     @Post
-    public User createUser(@Body User user) {
+    public User createUser(@Body @Valid User user) {
         return userService.createUser(user);
     }
 
     @Put("/{id}")
-    public User updateUser(@PathVariable Long id, @Body User user) {
+    public User updateUser(@PathVariable Long id, @Body @Valid User user) {
         return userService.updateUser(id, user);
     }
 

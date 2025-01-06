@@ -232,7 +232,142 @@ curl -X DELETE http://localhost:8080/users/2
 
 ---
 
-Would you like to include specific examples for error handling (e.g., 404 Not Found or 400 Bad Request)?
+### Exception Handling Scenarios:
+
+---
+
+### **1. Retrieve a Non-Existent User (404 Not Found)**
+
+If you try to retrieve a user with an ID that does not exist (e.g., `id=999`), the server will return a `404 Not Found` error.
+
+#### Example `curl` Command:
+```bash
+curl -X GET http://localhost:8080/users/999
+```
+
+#### Example Response:
+```json
+{
+	"error": "User not found",
+	"details": "User with ID 999 does not exist."
+}
+```
+
+---
+
+### **2. Create a User with Invalid Data (400 Bad Request)**
+
+If you attempt to create a user but omit required fields (e.g., `name`), the server will return a `400 Bad Request` error.
+
+#### Example `curl` Command:
+```bash
+curl -X POST http://localhost:8080/users \
+-H "Content-Type: application/json" \
+-d '{
+	"contact": "8553977672",
+	"email": "nitesh.rajput@gmail.com"
+}'
+```
+
+#### Example Response:
+```json
+{
+	"error": "Invalid request data",
+	"details": "Field 'name' is required."
+}
+```
+
+---
+
+### **3. Update a Non-Existent User (404 Not Found)**
+
+If you try to update a user that doesn’t exist (e.g., `id=999`), you’ll get a `404 Not Found` error.
+
+#### Example `curl` Command:
+```bash
+curl -X PUT http://localhost:8080/users/999 \
+-H "Content-Type: application/json" \
+-d '{
+	"name": "Nitesh Singh Rajput",
+	"contact": "8553977672",
+	"email": "nitesh.singh.rajput@gmail.com"
+}'
+```
+
+#### Example Response:
+```json
+{
+	"error": "User not found",
+	"details": "Cannot update user with ID 999 because it does not exist."
+}
+```
+
+---
+
+### **4. Delete a Non-Existent User (404 Not Found)**
+
+Trying to delete a user that doesn’t exist will result in a `404 Not Found` error.
+
+#### Example `curl` Command:
+```bash
+curl -X DELETE http://localhost:8080/users/999
+```
+
+#### Example Response:
+```json
+{
+	"error": "User not found",
+	"details": "User with ID 999 does not exist."
+}
+```
+
+---
+
+### **5. Invalid Request Format (400 Bad Request)**
+
+If the request JSON payload is malformed, the server will return a `400 Bad Request` error.
+
+#### Example `curl` Command:
+```bash
+curl -X POST http://localhost:8080/users \
+-H "Content-Type: application/json" \
+-d '{
+	"name": "Nitesh Rajput",
+	"contact": 8553977672, # Invalid data type
+	"email": "nitesh.rajput@gmail.com"
+}'
+```
+
+#### Example Response:
+```json
+{
+	"error": "Malformed JSON request",
+	"details": "Invalid data type for field 'contact'. Expected string but got number."
+}
+```
+
+---
+
+### **6. Unsupported HTTP Method (405 Method Not Allowed)**
+
+If you use an unsupported HTTP method (e.g., `PATCH`), the server will return a `405 Method Not Allowed` error.
+
+#### Example `curl` Command:
+```bash
+curl -X PATCH http://localhost:8080/users/2 \
+-H "Content-Type: application/json" \
+-d '{
+	"name": "Updated Name"
+}'
+```
+
+#### Example Response:
+```json
+{
+	"error": "Method not allowed",
+	"details": "HTTP method PATCH is not supported for this endpoint."
+}
+```
 
 ### **Contributing**
 If you’d like to contribute:
@@ -247,8 +382,6 @@ If you’d like to contribute:
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
-
-Let me know if you'd like to include any sample API endpoints or instructions for specific tools like Docker or IntelliJ setup!
 
 ## Micronaut 4.7.3 Documentation
 
