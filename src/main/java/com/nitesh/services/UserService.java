@@ -9,6 +9,8 @@ import jakarta.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
 
+import static com.nitesh.constants.Constant.DOES_NOT_EXIST;
+
 @Singleton
 public class UserService {
 
@@ -32,7 +34,7 @@ public class UserService {
 
     public User updateUser(Long id, @NonNull User user) {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User ID does not exist in our database"));
+                .orElseThrow(() -> new UserNotFoundException(String.format(DOES_NOT_EXIST, id)));
 
         existingUser.setContact(user.getContact());
         existingUser.setEmail(user.getEmail());
@@ -43,7 +45,7 @@ public class UserService {
 
     public String deleteUser(Long id) throws UserNotFoundException {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User ID does not exist in our database"));
+                .orElseThrow(() -> new UserNotFoundException(String.format(DOES_NOT_EXIST, id)));
         userRepository.delete(existingUser);
         return String.format("User with ID %d has been deleted successfully", id);
     }

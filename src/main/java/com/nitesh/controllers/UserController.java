@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.nitesh.constants.Constant.DOES_NOT_EXIST;
+
 
 @Controller("/users")
 public class UserController {
@@ -28,7 +30,7 @@ public class UserController {
     @Get("/{id}")
     public User getUserById(@PathVariable Long id) throws UserNotFoundException {
         return userService.getUser(id)
-                .orElseThrow(() ->  new UserNotFoundException("User ID does not exist in our database"));
+                .orElseThrow(() ->  new UserNotFoundException(String.format(DOES_NOT_EXIST, id)));
     }
 
     @Post
