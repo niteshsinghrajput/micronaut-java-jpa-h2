@@ -19,7 +19,6 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut:micronaut-http-server")
-    implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("io.micronaut:micronaut-validation:3.9.4")
     implementation("jakarta.validation:jakarta.validation-api:3.0.2")
@@ -29,19 +28,19 @@ dependencies {
     testImplementation("io.micronaut:micronaut-http-client")
 }
 
-
 application {
     mainClass = "com.nitesh.Application"
 }
+
 java {
     sourceCompatibility = JavaVersion.toVersion("21")
     targetCompatibility = JavaVersion.toVersion("21")
 }
 
-
 graalvmNative.toolchainDetection = false
 
 micronaut {
+    version = "4.7.3"
     runtime("netty")
     testRuntime("junit5")
     processing {
@@ -49,8 +48,6 @@ micronaut {
         annotations("com.nitesh.*")
     }
     aot {
-        // Please review carefully the optimizations enabled below
-        // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
         optimizeServiceLoading = false
         convertYamlToJava = false
         precomputeOperations = true
@@ -62,9 +59,26 @@ micronaut {
     }
 }
 
+shadowJar {
+    archiveBaseName.set("app")  // Set output JAR as "app.jar"
+    archiveClassifier.set("")   // Removes "-all" suffix
+    archiveVersion.set("")      // No version in filename
+}
+
+tasks.named("build") {
+    dependsOn("shadowJar")  // Ensure shadowJar runs when building
+}
+
+tasks.register("copyResources", Copy) {
+    from "src/main/resources"
+    into "build/resources"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE  // ✅ Handle duplicate files safely
+}
+
+tasks.named("processResources") {
+    dependsOn("copyResources")  // ✅ Ensure resources are copied before processing
+}
 
 tasks.named("dockerfileNative") {
     jdkVersion = "21"
 }
-
-
